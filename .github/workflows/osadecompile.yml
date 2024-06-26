@@ -1,0 +1,22 @@
+name: Manual AppleScript Decompilation
+
+on:
+   repository_dispatch:
+      types: [decompile-applescript]
+
+jobs:
+   build:
+      runs-on: macos-latest
+
+      steps:
+      -  name: Check out code
+         uses: actions/checkout@v4
+      
+      -  name: Decompile AppleScript
+         run: osadecompile input.scpt > output.applescript
+      
+      -  name: Upload compiled AppleScript
+         uses: actions/upload-artifact@v2
+         with:
+            name: output.applescript
+            path: output.applescript
