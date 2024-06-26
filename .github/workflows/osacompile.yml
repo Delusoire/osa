@@ -17,16 +17,13 @@ on:
 jobs:
    build:
       runs-on: macos-latest
-      env:
-         inputFile: ${{ github.event.inputs.inputFile }}
-         outputFile: ${{ github.event.inputs.outputFile }}
 
       steps:
       -  name: Clone repository
          uses: actions/checkout@v4
 
       -  name: Compile AppleScript
-         run: osacompile -o "${outputFile}" "${inputFile}"
+         run: osacompile -o "${{ github.event.inputs.outputFile }}" "${{ github.event.inputs.inputFile }}"
 
       -  name: Upload compiled AppleScript
          uses: actions/upload-artifact@v2
