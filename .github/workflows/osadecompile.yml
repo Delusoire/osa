@@ -22,12 +22,10 @@ jobs:
       -  name: Clone repository
          uses: actions/checkout@v4
 
-      -  name: Compile AppleScript
-         run: |
-            cat "${{ github.event.inputs.inputFile }}"
-            osadecompile "${{ github.event.inputs.inputFile }}" > "${{ github.event.inputs.outputFile }}"
+      -  name: Decompile AppleScript
+         run: osadecompile "${{ github.event.inputs.inputFile }}" > "${{ github.event.inputs.outputFile }}"
 
-      -  name: Upload compiled AppleScript
+      -  name: Upload decompiled AppleScript
          uses: actions/upload-artifact@v2
          with:
             name: ${{ github.event.inputs.outputFile }}
