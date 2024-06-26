@@ -1,22 +1,35 @@
-name: Manual AppleScript Decompilation
+name: AppleScript Decompilation
 
 on:
-   repository_dispatch:
-      types: [decompile-applescript]
+   workflow_dispatch:
+     inputs:
+      inputFile:
+        description: 'The file to decompile'
+        required: true
+        default: 'input.scpt'
+        type: string
+      outputFile:
+        description: 'The decompiled file'
+        required: true
+        default: 'output.applescript'
+        type: string
 
 jobs:
    build:
       runs-on: macos-latest
+      env:
+         inputFile: ${{ github.event.inputs.inputFile }}
+         outputFile: ${{ github.event.inputs.outputFile }}
 
       steps:
-      -  name: Check out code
+      -  name: Clone repository
          uses: actions/checkout@v4
-      
-      -  name: Decompile AppleScript
-         run: osadecompile input.scpt > output.applescript
-      
+
+      -  name: Compile AppleScript
+         run: osadecompile "${inputFile}" > "${outputFile}"
+
       -  name: Upload compiled AppleScript
          uses: actions/upload-artifact@v2
          with:
-            name: output.applescript
-            path: output.applescript
+            name: ${{ github.event.inputs.outputFile }}
+            path: ${{ github.event.inputs.outputFile }}

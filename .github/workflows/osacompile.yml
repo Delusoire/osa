@@ -1,22 +1,35 @@
-name: Manual AppleScript Compilation
+name: AppleScript Compilation
 
 on:
-   repository_dispatch:
-      types: [compile-applescript]
+   workflow_dispatch:
+     inputs:
+      inputFile:
+        description: 'The file to compile'
+        required: true
+        default: 'input.applescript'
+        type: string
+      outputFile:
+        description: 'The compiled file'
+        required: true
+        default: 'output.scpt'
+        type: string
 
 jobs:
    build:
       runs-on: macos-latest
+      env:
+         inputFile: ${{ github.event.inputs.inputFile }}
+         outputFile: ${{ github.event.inputs.outputFile }}
 
       steps:
-      -  name: Check out code
+      -  name: Clone repository
          uses: actions/checkout@v4
-      
+
       -  name: Compile AppleScript
-         run: osacompile -o output.scpt input.applescript
-      
+         run: osacompile -o "${outputFile}" "${inputFile}"
+
       -  name: Upload compiled AppleScript
          uses: actions/upload-artifact@v2
          with:
-            name: output.scpt
-            path: output.scpt
+            name: ${{ github.event.inputs.outputFile }}
+            path: ${{ github.event.inputs.outputFile }}
