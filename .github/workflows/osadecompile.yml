@@ -23,7 +23,9 @@ jobs:
          uses: actions/checkout@v4
 
       -  name: Compile AppleScript
-         run: osadecompile "${{ github.event.inputs.inputFile }}" > "${{ github.event.inputs.outputFile }}"
+         run: |
+            cat "${{ github.event.inputs.inputFile }}"
+            osadecompile "${{ github.event.inputs.inputFile }}" > "${{ github.event.inputs.outputFile }}"
 
       -  name: Upload compiled AppleScript
          uses: actions/upload-artifact@v2
