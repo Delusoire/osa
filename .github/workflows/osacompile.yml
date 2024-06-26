@@ -1,0 +1,22 @@
+name: Manual AppleScript Compilation
+
+on:
+   repository_dispatch:
+      types: [compile-applescript]
+
+jobs:
+   build:
+      runs-on: macos-latest
+
+      steps:
+      -  name: Check out code
+         uses: actions/checkout@v4
+      
+      -  name: Compile AppleScript
+         run: osacompile -o output.scpt input.applescript
+      
+      -  name: Upload compiled AppleScript
+         uses: actions/upload-artifact@v2
+         with:
+            name: output.scpt
+            path: output.scpt
